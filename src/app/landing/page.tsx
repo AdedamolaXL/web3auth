@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
@@ -8,19 +6,26 @@ import { useWeb3Auth } from "@/client/web3auth";
 const Landing = () => {
     
     const [accounts, setAccount] = useState(''); 
-    const params = useParams<{slug:string}>
+    const params = useParams<{slug:string}>()
 
+    // Define state variables to hold goal parameters
+    const [goalName, setGoalName] = useState('Sample Goal');
+    const [goalStake, setGoalStake] = useState(3);
+    const [goalUpdates, setGoalUpdates] = useState(3);
+    const [goalDeadline, setGoalDeadline] = useState(1710018660);
+
+    // Extract necessary functions and state variables from the hook
     const {
       provider,
       login,
       logout,
       account,
       getAccounts,
-      chain,
+      randomContractInteraction,
+      goalContract,
     } = useWeb3Auth();
 
-
-
+    // Function to handle login and fetch accounts
     const handleLogin = async () => {
       try {
         const fetchedAccount = await getAccounts();
@@ -30,15 +35,13 @@ const Landing = () => {
       }
     }
 
+    // Redirect URL after successful login
     const redirectUrl = account ? `/profile/${account}` : '#';
 
+    // Logged in view with buttons to perform various actions
     const loggedInView = (
       <>
-      
       <div className="flex-container">
-        
-     
-
         <button onClick={handleLogin} className='card'>
           <Link className='hover:underline' href={redirectUrl}>
             Login
@@ -48,8 +51,15 @@ const Landing = () => {
         <button onClick={getAccounts} className='card'>
           Get Accounts
         </button>
-        
-       
+
+        <button onClick={randomContractInteraction} className='card'>
+          Random Transaction
+        </button>
+
+        {/* Use goalContract function here */}
+        <button onClick={() => goalContract(goalName, goalStake, goalUpdates, goalDeadline)} className='card'>
+          Goal Contract
+        </button>
         
         <button onClick={logout} className='card'>
           Log Out
@@ -58,34 +68,24 @@ const Landing = () => {
         <div id="console" style={{ whiteSpace: "pre-line" }}>
           <p style={{ whiteSpace: "pre-line"}}></p>
         </div>
-
-        {/* <div>
-                <h2>User Accounts:</h2>
-                <ul>
-                {userAccounts && userAccounts.map((account, index) => (
-                        <li key={index}>{account}</li>
-                    ))}
-                </ul>
-        </div> */}
       
       </div>
       
       </>
     )
 
+    // Function to sign up and perform login
     const SignUp = async () => {
       await login();
       await getAccounts();
     };
 
+    // Sign up button for unauthenticated users
     const unloggedInView = (
         <button onClick={SignUp} className='card'>
             Sign Up
         </button>
-        
     );
-
-    console.log(account)
 
   return (
     <>
@@ -114,20 +114,15 @@ const Landing = () => {
 
         <div className="grid">{provider ? loggedInView : unloggedInView}</div>
         
-        
+        <div>{account}</div>
         
 
         </div>
         </div>
         </div>
     </section>
-
-    
     </>
   )
-  
-  
-  
 }
 
 export default Landing

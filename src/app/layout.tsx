@@ -7,21 +7,12 @@ import { useState } from 'react';
 import { Web3AuthProvider } from "@/client/web3auth";
 import { WEB3AUTH_NETWORK_TYPE } from "@/client/config/web3AuthNetwork";
 import { CHAIN_CONFIG_TYPE } from "@/client/config/chainConfig";
-import { Web3Auth } from "@web3auth/modal";
-
 
 
 const STORAGE_KEY = {
   WEB3AUTH_NETWORK: 'web3auth_network',
   BLOCKCHAIN: 'blockchain',
 };
-
-// function App() {
-//   const savedNetwork = window.localStorage.getItem(STORAGE_KEY.WEB3AUTH_NETWORK) as WEB3AUTH_NETWORK_TYPE;
-//   const savedChain = window.localStorage.getItem(STORAGE_KEY.BLOCKCHAIN) as CHAIN_CONFIG_TYPE;
-//   const [web3AuthNetwork, setWeb3AuthNetwork] = useState<WEB3AUTH_NETWORK_TYPE>(savedNetwork || 'sapphire_mainnet');
-//   const [chain, setChain] = useState<CHAIN_CONFIG_TYPE>(savedChain || 'calibration');
-// }
 
 
 const inter = Inter({ subsets: ["latin"] });

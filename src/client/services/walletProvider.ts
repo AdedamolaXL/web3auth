@@ -3,6 +3,8 @@ import web3Provider from "./web3Provider";
 
 export interface IWalletProvider {
   getAccounts: () => Promise<string>;
+  randomContractInteraction?: () => Promise<void>;
+  goalContract?: (target: string, stake: number, updates: number, deadline: number) => Promise<void>;
 }
 
 export const getWalletProvider = (chain: string, provider: IProvider, uiConsole: any): IWalletProvider => {

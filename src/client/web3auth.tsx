@@ -21,8 +21,9 @@ export interface IWeb3AuthContext {
     login: () => Promise<void>;
     logout: () => Promise<void>;
     getAccounts: () => Promise<string>;
-}
-
+    randomContractInteraction: () => Promise<void>;
+    goalContract: (target: string, stake: number, updates: number, deadline: number) => Promise<void>;
+} 
 export const Web3AuthContext = createContext<IWeb3AuthContext>({
     web3Auth: null,
     provider: null,
@@ -35,6 +36,8 @@ export const Web3AuthContext = createContext<IWeb3AuthContext>({
     getAccounts: async () => {
       return '';
     },
+    randomContractInteraction: async () => {},
+    goalContract: async () => {},
 });
 
 export function useWeb3Auth(): IWeb3AuthContext {
@@ -292,6 +295,23 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({ children, 
         }
     }
 
+    const randomContractInteraction = async () => {
+        if (!provider) {
+            console.log('provider not initialized');
+            uiConsole('provider not initialized');
+            return;
+        }
+        await provider.randomContractInteraction?.();
+    }
+    const goalContract = async (target: string, stake: number, updates: number, deadline: number) => {
+        if (!provider) {
+            console.log('provider not initialized yet');
+            uiConsole('provider not initialized yet');
+            return;
+        }
+        await provider.goalContract?.(target, stake, updates, deadline);
+    }
+    
     const uiConsole = (...args: unknown[]): void => {
         const el = document.querySelector('#console>p');
         if (el) {
@@ -313,6 +333,8 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({ children, 
         login,
         logout,
         getAccounts,
+        randomContractInteraction,
+        goalContract,
     };
     
     return <Web3AuthContext.Provider value={contextProvider}>{children}</Web3AuthContext.Provider>;
